@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,13 +24,21 @@ public class Item {
 
     private double level;
 
+    @ManyToMany
+    @JoinTable(
+            name = "\"Items_Tags\"",
+            joinColumns = { @JoinColumn(name = "\"ItemId\"") },
+            inverseJoinColumns = { @JoinColumn(name = "\"TagId\"") }
+    )
+    private List<Tag> tags;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tag")
-    private Tag tag;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "folder")
     private Folder folder;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "infoTree")
+    private InfoTree infoTree;
 
 }

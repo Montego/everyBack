@@ -1,5 +1,6 @@
 package com.every.every.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,20 +9,16 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "\"Folder\"")
-public class Folder {
+@Table(name = "\"InfoTree\"")
+public class InfoTree {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    User user;
 
     private double level;
-
-//    private Folder parent;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "infoTree")
-    private InfoTree infoTree;
-    //private Folder folder;
 }
