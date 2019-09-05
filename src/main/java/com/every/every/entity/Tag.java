@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "\"Tag\"")
-public class Tag {
+class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

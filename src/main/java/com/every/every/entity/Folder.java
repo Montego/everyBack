@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,10 +19,22 @@ public class Folder {
 
     private double level;
 
-//    private Folder parent;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "infoTree")
     private InfoTree infoTree;
-    //private Folder folder;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Folder folder = (Folder) o;
+        return Double.compare(folder.level, level) == 0 &&
+                id.equals(folder.id) &&
+                name.equals(folder.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, level);
+    }
 }

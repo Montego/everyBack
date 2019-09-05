@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,5 +21,20 @@ public class InfoTree {
     @JsonBackReference
     User user;
 
-    private double level;
+    @OneToMany(mappedBy = "infoTree")
+    private Set<Folder> folder;
+
+    private Long folder_id;
+
+    private double folder_level;
+
+    private String folder_name;
+
+    @OneToMany(mappedBy = "infoTree")
+    private Set<Item> item;
+
+    private Long item_id;
+
+    private String item_name;
+
 }
