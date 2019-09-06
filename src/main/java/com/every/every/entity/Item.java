@@ -1,5 +1,6 @@
 package com.every.every.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -41,6 +42,10 @@ public class Item {
     @JoinColumn(name = "infoTree")
     private InfoTree infoTree;
 
+
+    @OneToOne(cascade=CascadeType.ALL, mappedBy= "item")
+    @JsonManagedReference
+    private ItemContent itemContent;
 
     @Override
     public boolean equals(Object o) {

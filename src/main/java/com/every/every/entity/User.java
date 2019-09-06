@@ -1,6 +1,5 @@
 package com.every.every.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -18,7 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(cascade=CascadeType.ALL, mappedBy= "user")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonManagedReference
     private InfoTree infoTree;
 

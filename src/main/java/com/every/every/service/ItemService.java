@@ -16,18 +16,19 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public Item getOne(Long id){
+    public Item getOne(Long id) {
         return itemRepository.getOne(id);
     }
-    public List<Item> getAll (){
+
+    public List<Item> getAll() {
         return itemRepository.findAll();
     }
 
-    public Item save (Item item) {
+    public Item save(Item item) {
         return itemRepository.save(item);
     }
 
-    public String delete (Long id){
+    public String delete(Long id) {
         itemRepository.deleteById(id);
         return "Item was deleted";
     }
