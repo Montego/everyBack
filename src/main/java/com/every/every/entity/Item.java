@@ -39,8 +39,8 @@ public class Item {
     private Folder folder;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "infoTree")
-    private InfoTree infoTree;
+    @JoinColumn(name = "TreeStore")
+    private TreeStore treeStore;
 
 
     @OneToOne(cascade=CascadeType.ALL, mappedBy= "item")

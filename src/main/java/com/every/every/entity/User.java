@@ -19,7 +19,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonManagedReference
-    private InfoTree infoTree;
+    private TreeStore treeStore;
 
     private String username;
 

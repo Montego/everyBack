@@ -20,8 +20,8 @@ public class Folder {
     private double level;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "infoTree")
-    private InfoTree infoTree;
+    @JoinColumn(name = "TreeStore")
+    private TreeStore treeStore;
 
     @Override
     public boolean equals(Object o) {
