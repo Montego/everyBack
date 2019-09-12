@@ -16,20 +16,26 @@ public class TreeStoreService {
         this.treeStoreRepository = treeStoreRepository;
     }
 
-    public TreeStore getOne(Long id) {
+    public TreeStore getOne(String id) {
         return treeStoreRepository.getOne(id);
     }
 
     public List<TreeStore> getAll() {
         return treeStoreRepository.findAll();
     }
+    public List<TreeStore> getAllByType(String type) {
+        return treeStoreRepository.findAllByType(type);
+    }
 
-    public List<TreeStore> save(List<TreeStore> treeStores) {
+    public TreeStore save(TreeStore treeStores) {
         return treeStoreRepository.save(treeStores);
     }
 
-    public String delete(Long id) {
+    public String delete(String id) {
         treeStoreRepository.deleteById(id);
         return "TreeStore was deleted";
     }
 }
+//    List<Entity> list = entity.getList()
+//entityRepo.removeAll(list);
+//        entityRepo.remove(entity);

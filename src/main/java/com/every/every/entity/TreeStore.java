@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,9 +17,12 @@ import java.util.Set;
 @Entity
 @Table(name = "\"TreeStore\"")
 public class TreeStore {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Long id;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -26,8 +31,11 @@ public class TreeStore {
 
     private String text;
 
+    private String type;
+
     private String data;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+//    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "treeStore_children",
             joinColumns = {@JoinColumn(name = "treeStore_id")},
@@ -37,6 +45,7 @@ public class TreeStore {
 
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference
     private State state;
 
@@ -53,6 +62,15 @@ public class TreeStore {
     @Override
     public int hashCode() {
         return Objects.hash(id, text, children);
+    }
+
+    @Override
+    public String toString() {
+        return "TreeStore{" +
+                "id='" + id + '\'' +
+                ", text='" + text + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
 
     //    @OneToMany(mappedBy = "TreeStore")
