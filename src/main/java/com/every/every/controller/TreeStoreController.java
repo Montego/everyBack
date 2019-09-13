@@ -27,11 +27,12 @@ public class TreeStoreController {
 
 
     @PostMapping("/saveChange")
-    public String saveTreeStore(@RequestBody List<TreeStore> treeStores) {
+    public List<TreeStore> saveTreeStore(@RequestBody List<TreeStore> treeStores) {
         for (TreeStore treeStore : treeStores) {
             treeStoreService.save(treeStore);
         }
-        return "saved";
+//        return "saved";
+        return treeStoreService.getAll();
     }
 
     @PutMapping("/putIntoFile/{id}")

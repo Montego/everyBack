@@ -16,10 +16,10 @@ public class ItemContent {
     private Long id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "treeStore_id")
     @JsonBackReference
-    private Item item;
+    private TreeStore treeStore;
 
-    private String content;
+    private String text;
 
 }

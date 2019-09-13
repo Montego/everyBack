@@ -33,7 +33,10 @@ public class TreeStore {
 
     private String type;
 
-    private String data;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
+    @JsonManagedReference
+    private ItemContent data;
+
     @ManyToMany(cascade = CascadeType.ALL)
 //    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
