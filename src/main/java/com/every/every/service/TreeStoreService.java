@@ -5,7 +5,7 @@ import com.every.every.repository.TreeStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class TreeStoreService {
@@ -20,11 +20,12 @@ public class TreeStoreService {
         return treeStoreRepository.getOne(id);
     }
 
-    public List<TreeStore> getAll() {
-        return treeStoreRepository.findAll();
-    }
-    public List<TreeStore> getAllByType(String type) {
+    public Set<TreeStore> getAllByType(String type) {
         return treeStoreRepository.findAllByType(type);
+    }
+
+    public Set<TreeStore> getAllByLevel(String level) {
+        return treeStoreRepository.findAllByLevel(level);
     }
 
     public TreeStore save(TreeStore treeStores) {
@@ -32,10 +33,19 @@ public class TreeStoreService {
     }
 
     public String delete(String id) {
+        Set<TreeStore> nodesChild = getOne(id).getChildren();
+        if (nodesChild.size() > 0) {
+            for (TreeStore children : nodesChild) {
+                treeStoreRepository.deleteById(children.getId());
+            }
+        }
         treeStoreRepository.deleteById(id);
         return "TreeStore was deleted";
     }
+
+    public String deleteAll() {
+        treeStoreRepository.deleteAll();
+        return "all TreeStore was deleted";
+    }
 }
-//    List<Entity> list = entity.getList()
-//entityRepo.removeAll(list);
-//        entityRepo.remove(entity);
+

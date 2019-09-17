@@ -3,6 +3,7 @@ package com.every.every.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -21,5 +22,9 @@ public class ItemContent {
     private TreeStore treeStore;
 
     private String text;
+
+    private String type;
+    @Type(type="text")
+    private String content;
 
 }

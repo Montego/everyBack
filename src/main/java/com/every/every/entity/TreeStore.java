@@ -24,6 +24,16 @@ public class TreeStore {
     @Id
     private String id;
 
+    private boolean isBatch;
+
+    private boolean isEditing;
+
+    private boolean showChildren;
+
+    private String level;
+
+    private String parent;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonBackReference
@@ -38,7 +48,6 @@ public class TreeStore {
     private ItemContent data;
 
     @ManyToMany(cascade = CascadeType.ALL)
-//    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "treeStore_children",
             joinColumns = {@JoinColumn(name = "treeStore_id")},
@@ -72,24 +81,9 @@ public class TreeStore {
         return "TreeStore{" +
                 "id='" + id + '\'' +
                 ", text='" + text + '\'' +
-                ", type='" + type + '\'' +
+//                ", type='" + type + '\'' +
                 '}';
     }
 
-    //    @OneToMany(mappedBy = "TreeStore")
-//    private Set<Folder> folder;
-//
-//    private Long folder_id;
-//
-//    private double folder_level;
-//
-//    private String folder_name;
-//
-//    @OneToMany(mappedBy = "TreeStore")
-//    private Set<Item> item;
-//
-//    private Long item_id;
-//
-//    private String item_name;
 
 }

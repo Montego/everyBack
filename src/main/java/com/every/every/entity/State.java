@@ -1,7 +1,6 @@
 package com.every.every.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +15,6 @@ public class State {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "state")
-//    @JsonManagedReference
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "treeStore_id")
     @JsonBackReference

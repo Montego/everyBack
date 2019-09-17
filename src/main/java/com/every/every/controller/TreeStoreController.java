@@ -5,7 +5,9 @@ import com.every.every.service.TreeStoreService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/treeStore")
@@ -16,36 +18,68 @@ public class TreeStoreController {
         this.treeStoreService = treeStoreService;
     }
 
-    @GetMapping("/getAll")
-    public List<TreeStore> getListTreeStore() {
-        return treeStoreService.getAll();
-    }
-    @GetMapping("/getAllByType")
-    public List<TreeStore> getListTreeStoreByType() {
-        return treeStoreService.getAllByType("folder");
+
+    @GetMapping("/getAllByLevel")
+    public Set<TreeStore> getListTreeStoreByType() {
+        return treeStoreService.getAllByLevel("root");
     }
 
 
     @PostMapping("/saveChange")
-    public List<TreeStore> saveTreeStore(@RequestBody List<TreeStore> treeStores) {
+    public Set<TreeStore> saveTreeStore(@RequestBody List<TreeStore> treeStores) {
         for (TreeStore treeStore : treeStores) {
+            treeStore.setType(treeStore.getData().getType());
             treeStoreService.save(treeStore);
         }
-//        return "saved";
-        return treeStoreService.getAll();
+        return treeStoreService.getAllByLevel("root");
     }
 
-    @PutMapping("/putIntoFile/{id}")
-    public String putIntoFile(@PathVariable String id, @RequestBody TreeStore treeStore) {
-        System.out.println("update method inside");
-        System.out.println(treeStore.toString());
-        TreeStore treeStoreNew = treeStoreService.getOne(id);
-        treeStoreNew.getChildren().add(treeStore);
-        System.out.println(treeStoreNew.getChildren().toString());
-//        TreeStore treeStoreOld = treeStoreService.getOne(id);
-//        BeanUtils.copyProperties(treeStoreNew, treeStoreOld, "id");
+
+    @PostMapping("/saveNode/")
+    public TreeStore saveNode(@RequestBody TreeStore treeStore) {
+        treeStoreService.save(treeStore);
+        return treeStore;
+    }
+
+    @PostMapping("/saveNodeAsChild/")
+    public String saveNodeAsChild(@RequestBody TreeStore treeStore) {
+        TreeStore nodeParentNew = treeStoreService.getOne(treeStore.getParent());
+        Set<TreeStore> addedChild = new HashSet<>();
+        addedChild.add(treeStore);
+        nodeParentNew.setChildren(addedChild);
+        TreeStore nodeParentOld = treeStoreService.getOne(treeStore.getParent());
+        BeanUtils.copyProperties(nodeParentNew, nodeParentOld, "id");
+        treeStoreService.save(nodeParentNew);
+        return "added child";
+    }
+
+    @PutMapping("/editNode/{id}")
+    public String editNode(@PathVariable String id, @RequestBody String newName) {
+        TreeStore nodeWithNewName = treeStoreService.getOne(id);
+        nodeWithNewName.setText(newName);
+        TreeStore nodeFromDB = treeStoreService.getOne(id);
+        BeanUtils.copyProperties(nodeWithNewName, nodeFromDB, "id");
+        treeStoreService.save(nodeWithNewName);
         return "update";
     }
+
+    @PostMapping("/deleteNode/{id}")
+    public String deleteNode(@PathVariable String id) {
+        treeStoreService.delete(id);
+        return "delete";
+    }
+
+//    @PutMapping("/putIntoFile/{id}")
+//    public String putIntoFile(@PathVariable String id, @RequestBody TreeStore treeStore) {
+//        System.out.println("update method inside");
+//        System.out.println(treeStore.toString());
+//        TreeStore treeStoreNew = treeStoreService.getOne(id);
+//        treeStoreNew.getChildren().add(treeStore);
+//        System.out.println(treeStoreNew.getChildren().toString());
+////        TreeStore treeStoreOld = treeStoreService.getOne(id);
+////        BeanUtils.copyProperties(treeStoreNew, treeStoreOld, "id");
+//        return "update";
+//    }
 
 
     @PostMapping("/delete")
