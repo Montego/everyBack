@@ -14,11 +14,13 @@ public class TreeStoreService {
     @Autowired
     public TreeStoreService(TreeStoreRepository treeStoreRepository) {
         this.treeStoreRepository = treeStoreRepository;
+
     }
 
     public TreeStore getOne(String id) {
         return treeStoreRepository.getOne(id);
     }
+
 
     public Set<TreeStore> getAllByType(String type) {
         return treeStoreRepository.findAllByType(type);
@@ -39,6 +41,22 @@ public class TreeStoreService {
                 treeStoreRepository.deleteById(children.getId());
             }
         }
+//TODO delete node like child
+
+        TreeStore nodeForDelete = treeStoreRepository.getOne(id);
+
+//        if (!"".equals(nodeForDelete.getParent())){
+//            TreeStore parentNodeOfNodeForDelete = treeStoreRepository.getOne(nodeForDelete.getParent());
+//            Set<TreeStore> children = parentNodeOfNodeForDelete.getChildren();
+//            for (TreeStore child : children) {
+//                if(child.getId().equals(id)){
+//                    treeStoreRepository.deleteById(child.getId());
+//                }
+//            }
+//            parentNodeOfNodeForDelete.setChildren(children);
+//            treeStoreRepository.save(parentNodeOfNodeForDelete);
+//        }
+
         treeStoreRepository.deleteById(id);
         return "TreeStore was deleted";
     }

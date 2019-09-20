@@ -17,9 +17,6 @@ import java.util.Set;
 @Entity
 @Table(name = "\"TreeStore\"")
 public class TreeStore {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long id;
 
     @Id
     private String id;
@@ -49,7 +46,7 @@ public class TreeStore {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "treeStore_children",
+            name = "\"TreeStore_Children\"",
             joinColumns = {@JoinColumn(name = "treeStore_id")},
             inverseJoinColumns = {@JoinColumn(name = "children_id")}
     )
@@ -84,6 +81,8 @@ public class TreeStore {
 //                ", type='" + type + '\'' +
                 '}';
     }
+
+
 
 
 }

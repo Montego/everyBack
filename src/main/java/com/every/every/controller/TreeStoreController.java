@@ -5,7 +5,6 @@ import com.every.every.service.TreeStoreService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,11 +43,7 @@ public class TreeStoreController {
     @PostMapping("/saveNodeAsChild/")
     public String saveNodeAsChild(@RequestBody TreeStore treeStore) {
         TreeStore nodeParentNew = treeStoreService.getOne(treeStore.getParent());
-        Set<TreeStore> addedChild = new HashSet<>();
-        addedChild.add(treeStore);
-        nodeParentNew.setChildren(addedChild);
-        TreeStore nodeParentOld = treeStoreService.getOne(treeStore.getParent());
-        BeanUtils.copyProperties(nodeParentNew, nodeParentOld, "id");
+        nodeParentNew.getChildren().add(treeStore);
         treeStoreService.save(nodeParentNew);
         return "added child";
     }
@@ -68,18 +63,6 @@ public class TreeStoreController {
         treeStoreService.delete(id);
         return "delete";
     }
-
-//    @PutMapping("/putIntoFile/{id}")
-//    public String putIntoFile(@PathVariable String id, @RequestBody TreeStore treeStore) {
-//        System.out.println("update method inside");
-//        System.out.println(treeStore.toString());
-//        TreeStore treeStoreNew = treeStoreService.getOne(id);
-//        treeStoreNew.getChildren().add(treeStore);
-//        System.out.println(treeStoreNew.getChildren().toString());
-////        TreeStore treeStoreOld = treeStoreService.getOne(id);
-////        BeanUtils.copyProperties(treeStoreNew, treeStoreOld, "id");
-//        return "update";
-//    }
 
 
     @PostMapping("/delete")

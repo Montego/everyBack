@@ -26,5 +26,12 @@ public class ItemContent {
     private String type;
     @Type(type="text")
     private String content;
+    @Type(type="text")
+    private String contentName;
+
+    private String contentType;
+
+    private long contentSize;
+
 
 }
