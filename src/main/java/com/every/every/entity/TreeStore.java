@@ -77,12 +77,10 @@ public class TreeStore {
     public String toString() {
         return "TreeStore{" +
                 "id='" + id + '\'' +
+                ", parent='" + parent + '\'' +
                 ", text='" + text + '\'' +
-//                ", type='" + type + '\'' +
+                ", type='" + type + '\'' +
+                ", children=" + children +
                 '}';
     }
-
-
-
-
 }

@@ -21,7 +21,6 @@ public class TreeStoreService {
         return treeStoreRepository.getOne(id);
     }
 
-
     public Set<TreeStore> getAllByType(String type) {
         return treeStoreRepository.findAllByType(type);
     }
@@ -35,28 +34,29 @@ public class TreeStoreService {
     }
 
     public String delete(String id) {
-        Set<TreeStore> nodesChild = getOne(id).getChildren();
+
+        Set<TreeStore> nodesChild = treeStoreRepository.getOne(id).getChildren();
         if (nodesChild.size() > 0) {
             for (TreeStore children : nodesChild) {
                 treeStoreRepository.deleteById(children.getId());
             }
+            treeStoreRepository.deleteById(id);
         }
 //TODO delete node like child
-
-        TreeStore nodeForDelete = treeStoreRepository.getOne(id);
-
-//        if (!"".equals(nodeForDelete.getParent())){
-//            TreeStore parentNodeOfNodeForDelete = treeStoreRepository.getOne(nodeForDelete.getParent());
-//            Set<TreeStore> children = parentNodeOfNodeForDelete.getChildren();
-//            for (TreeStore child : children) {
-//                if(child.getId().equals(id)){
-//                    treeStoreRepository.deleteById(child.getId());
-//                }
+        if (!"".equals(treeStoreRepository.getOne(id).getParent())) {
+            TreeStore parent = treeStoreRepository.getOne(treeStoreRepository.getOne(id).getParent());
+            Set<TreeStore> children = parent.getChildren();
+            for (TreeStore child : children) {
+                if (child.getId().equals(id)) {
+                    treeStoreRepository.deleteById(id);
+                }
+            }
+//
+//            if(id.equals("")){
+//                System.out.println();
 //            }
-//            parentNodeOfNodeForDelete.setChildren(children);
-//            treeStoreRepository.save(parentNodeOfNodeForDelete);
-//        }
 
+        }
         treeStoreRepository.deleteById(id);
         return "TreeStore was deleted";
     }
