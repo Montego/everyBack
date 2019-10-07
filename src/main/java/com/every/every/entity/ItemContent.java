@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -32,6 +33,8 @@ public class ItemContent {
     private String contentType;
 
     private long contentSize;
+
+    private String formatDateTime;
 
 
 }

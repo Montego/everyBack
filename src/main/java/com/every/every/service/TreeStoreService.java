@@ -48,16 +48,18 @@ public class TreeStoreService {
             Set<TreeStore> children = parent.getChildren();
             for (TreeStore child : children) {
                 if (child.getId().equals(id)) {
+                    System.out.println("i'm inside children checked equals id");
                     treeStoreRepository.deleteById(id);
+                    children.remove(child);
                 }
             }
-//
-//            if(id.equals("")){
-//                System.out.println();
-//            }
+            System.out.println("children: " + children);
+            parent.setChildren(children);
+            System.out.println("parent: " + parent);
+            treeStoreRepository.save(parent);
 
         }
-        treeStoreRepository.deleteById(id);
+//        treeStoreRepository.deleteById(id);
         return "TreeStore was deleted";
     }
 

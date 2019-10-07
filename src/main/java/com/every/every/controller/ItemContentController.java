@@ -8,6 +8,9 @@ import com.every.every.service.TreeStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @RestController
 @RequestMapping("/itemContent")
 public class ItemContentController {
@@ -28,6 +31,11 @@ public class ItemContentController {
         treeStore.getData().setContentSize(itemContentDTO.getContentSize());
         treeStore.getData().setContentType(itemContentDTO.getContentType());
 
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formatDateTime = now.format(formatter);
+
+        treeStore.getData().setFormatDateTime(formatDateTime);
         treeStoreService.save(treeStore);
         return "update itemContent";
     }
