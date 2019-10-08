@@ -1,9 +1,9 @@
 package com.every.every.config;
 
-import com.every.every.config.CustomHandlers.CustomAuthenticationEntryPoint;
-import com.every.every.config.CustomHandlers.CustomAuthenticationFailureHandler;
-import com.every.every.config.CustomHandlers.CustomLogoutSuccessHandler;
-import com.every.every.config.CustomHandlers.CustomSimpleUrlAuthenticationSuccessHandler;
+import com.every.every.config.customHandlers.CustomAuthenticationEntryPoint;
+import com.every.every.config.customHandlers.CustomAuthenticationFailureHandler;
+import com.every.every.config.customHandlers.CustomLogoutSuccessHandler;
+import com.every.every.config.customHandlers.CustomSimpleUrlAuthenticationSuccessHandler;
 import com.every.every.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

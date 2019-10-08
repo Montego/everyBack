@@ -17,7 +17,7 @@ public class TreeStoreController {
         this.treeStoreService = treeStoreService;
     }
 
-
+//запилить роут для админа - http://localhost:8085/swagger-ui.html
     @GetMapping("/getAllByLevel")
     public Set<TreeStore> getListTreeStoreByType() {
         return treeStoreService.getAllByLevel("root");

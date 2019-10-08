@@ -34,15 +34,18 @@ public class TreeStoreService {
     }
 
     public String delete(String id) {
-
+        System.out.println("coming id for delete" + id);
         Set<TreeStore> nodesChild = treeStoreRepository.getOne(id).getChildren();
+        if(nodesChild.size() == 0) {
+            treeStoreRepository.deleteById(id);
+        }
+
         if (nodesChild.size() > 0) {
             for (TreeStore children : nodesChild) {
                 treeStoreRepository.deleteById(children.getId());
             }
             treeStoreRepository.deleteById(id);
         }
-//TODO delete node like child
         if (!"".equals(treeStoreRepository.getOne(id).getParent())) {
             TreeStore parent = treeStoreRepository.getOne(treeStoreRepository.getOne(id).getParent());
             Set<TreeStore> children = parent.getChildren();

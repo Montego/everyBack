@@ -1,4 +1,4 @@
-package com.every.every.config.CustomHandlers;
+package com.every.every.config.customHandlers;
 
 import com.every.every.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;

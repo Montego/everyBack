@@ -1,4 +1,4 @@
-package com.every.every.config.CustomHandlers;
+package com.every.every.config.customHandlers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

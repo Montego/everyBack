@@ -25,6 +25,7 @@ public class ItemContent {
     private String text;
 
     private String type;
+//    TODO json ignore
     @Type(type="text")
     private String content;
     @Type(type="text")
