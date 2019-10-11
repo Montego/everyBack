@@ -1,4 +1,4 @@
-package com.every.every.config;
+package com.every.every.config.webConfiguration;
 
 import com.every.every.config.customHandlers.CustomAuthenticationEntryPoint;
 import com.every.every.config.customHandlers.CustomAuthenticationFailureHandler;
@@ -71,11 +71,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll();
-
         http
                 .authorizeRequests()
                 .antMatchers("/login*").anonymous();
-
         http
                 .authorizeRequests()
                 .antMatchers("/", "/registration", "/alive").permitAll()

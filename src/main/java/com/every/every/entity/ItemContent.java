@@ -1,6 +1,7 @@
 package com.every.every.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -27,6 +28,7 @@ public class ItemContent {
     private String type;
 //    TODO json ignore
     @Type(type="text")
+    @JsonIgnore
     private String content;
     @Type(type="text")
     private String contentName;

@@ -33,42 +33,60 @@ public class TreeStoreService {
         return treeStoreRepository.save(treeStores);
     }
 
+    private void deleteChild(String id, Set<TreeStore> childrenOfParentDeleteTreeStore) {
+        childrenOfParentDeleteTreeStore.removeIf(treeStore -> treeStore.getId().equals(id));
+
+//it's variant for remove wich fix java.util.ConcurrentModificationException: null
+
+//        Iterator<String> iter = myArrayList.iterator();
+//        while (iter.hasNext()) {
+//            String str = iter.next();
+//            if (someCondition)
+//                iter.remove();
+//        }
+
+        TreeStore deleteTreeStore = treeStoreRepository.findById(id).get();
+        TreeStore parentDeleteTreeStore = treeStoreRepository.findById(deleteTreeStore.getParent()).get();
+        parentDeleteTreeStore.setChildren(childrenOfParentDeleteTreeStore);
+        treeStoreRepository.save(parentDeleteTreeStore);
+        treeStoreRepository.deleteById(id);
+    }
+
     public String delete(String id) {
-        System.out.println("coming id for delete" + id);
-        Set<TreeStore> nodesChild = treeStoreRepository.getOne(id).getChildren();
-        if(nodesChild.size() == 0) {
-            treeStoreRepository.deleteById(id);
+        System.out.println("id for delete: " + id);
+        if (treeStoreRepository.findById(id).isPresent()) {
+            System.out.println("id founded");
+        } else {
+            System.out.println("id not founded!");
+        }
+        TreeStore deleteTreeStore = treeStoreRepository.findById(id).get();
+
+        if (deleteTreeStore.getChildren().size() == 0) {
+            System.out.println("1.haven't children");
+            if ("".equals(deleteTreeStore.getParent())) {
+                System.out.println("1.1.haven't children AND haven't parent");
+                treeStoreRepository.deleteById(id);
+            } else {
+                System.out.println("1.2.haven't children AND have parent");
+                TreeStore parentDeleteTreeStore = treeStoreRepository.findById(deleteTreeStore.getParent()).get();
+                Set<TreeStore> childrenOfParentDeleteTreeStore = parentDeleteTreeStore.getChildren();
+                deleteChild(id, childrenOfParentDeleteTreeStore);
+            }
+        } else {
+            System.out.println("2.have children");
+            if ("".equals(deleteTreeStore.getParent())) {
+                System.out.println("2.1.have children AND haven't parent");
+                treeStoreRepository.deleteById(id);
+            } else {
+                System.out.println("2.2.have children AND have parent");
+                TreeStore parentDeleteTreeStore = treeStoreRepository.findById(deleteTreeStore.getParent()).get();
+                Set<TreeStore> childrenOfParentDeleteTreeStore = parentDeleteTreeStore.getChildren();
+                deleteChild(id, childrenOfParentDeleteTreeStore);
+            }
         }
 
-        if (nodesChild.size() > 0) {
-            for (TreeStore children : nodesChild) {
-                treeStoreRepository.deleteById(children.getId());
-            }
-            treeStoreRepository.deleteById(id);
-        }
-        if (!"".equals(treeStoreRepository.getOne(id).getParent())) {
-            TreeStore parent = treeStoreRepository.getOne(treeStoreRepository.getOne(id).getParent());
-            Set<TreeStore> children = parent.getChildren();
-            for (TreeStore child : children) {
-                if (child.getId().equals(id)) {
-                    System.out.println("i'm inside children checked equals id");
-                    treeStoreRepository.deleteById(id);
-                    children.remove(child);
-                }
-            }
-            System.out.println("children: " + children);
-            parent.setChildren(children);
-            System.out.println("parent: " + parent);
-            treeStoreRepository.save(parent);
-
-        }
-//        treeStoreRepository.deleteById(id);
         return "TreeStore was deleted";
     }
 
-    public String deleteAll() {
-        treeStoreRepository.deleteAll();
-        return "all TreeStore was deleted";
-    }
 }
 

@@ -2,6 +2,7 @@ package com.every.every.controller;
 
 import com.every.every.entity.TreeStore;
 import com.every.every.service.TreeStoreService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/treeStore")
+//@ApiOperation(value = "CRUD для дерева данных")
 public class TreeStoreController {
     private final TreeStoreService treeStoreService;
 

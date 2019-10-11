@@ -2,6 +2,7 @@ package com.every.every.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.Api;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "\"TreeStore\"")
+//@Api(value="TreeStore controller class", description="Дерево данных")
 public class TreeStore {
 
     @Id
