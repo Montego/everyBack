@@ -1,8 +1,9 @@
 package com.every.every.entity;
 
-import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
 
-public enum Role implements GrantedAuthority {
+
+public enum Role{
         USER("just some user's rights"), ADMIN("all rights (set roles to users,list of users"), MANAGER("content");
 
         private String description;
@@ -11,8 +12,8 @@ public enum Role implements GrantedAuthority {
             this.description = description;
         }
 
-    @Override
-    public String getAuthority() {
-        return name();
-    }
+//    @Override
+//    public String getAuthority() {
+//        return name();
+//    }
 }

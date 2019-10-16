@@ -3,8 +3,8 @@ package com.every.every.controller;
 import com.every.every.dto.ItemContentDTO;
 import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
-import com.every.every.service.ItemContentService;
-import com.every.every.service.TreeStoreService;
+import com.every.every.service.entityService.ItemContentService;
+import com.every.every.service.entityService.TreeStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

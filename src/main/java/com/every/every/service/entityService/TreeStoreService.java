@@ -1,4 +1,4 @@
-package com.every.every.service;
+package com.every.every.service.entityService;
 
 import com.every.every.entity.TreeStore;
 import com.every.every.repository.TreeStoreRepository;
