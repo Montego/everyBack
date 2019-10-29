@@ -55,10 +55,10 @@ public class TreeStore {
     private Set<TreeStore> children = new HashSet<>();
 
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference
-    private State state;
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JsonManagedReference
+//    private State state;
 
     @Override
     public boolean equals(Object o) {

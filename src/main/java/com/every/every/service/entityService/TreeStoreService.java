@@ -45,6 +45,11 @@ public class TreeStoreService {
 //                iter.remove();
 //        }
 
+//        for(int i = 0; i< children.size(); i++){
+//          System.out.println(children[i]);
+//        }
+
+
         TreeStore deleteTreeStore = treeStoreRepository.findById(id).get();
         TreeStore parentDeleteTreeStore = treeStoreRepository.findById(deleteTreeStore.getParent()).get();
         parentDeleteTreeStore.setChildren(childrenOfParentDeleteTreeStore);
@@ -52,13 +57,8 @@ public class TreeStoreService {
         treeStoreRepository.deleteById(id);
     }
 
-    public String delete(String id) {
+    public boolean delete(String id) {
         System.out.println("id for delete: " + id);
-        if (treeStoreRepository.findById(id).isPresent()) {
-            System.out.println("id founded");
-        } else {
-            System.out.println("id not founded!");
-        }
         TreeStore deleteTreeStore = treeStoreRepository.findById(id).get();
 
         if (deleteTreeStore.getChildren().size() == 0) {
@@ -85,7 +85,7 @@ public class TreeStoreService {
             }
         }
 
-        return "TreeStore was deleted";
+        return true;
     }
 
 }
