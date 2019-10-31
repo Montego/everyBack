@@ -3,7 +3,7 @@ package com.every.every.controller;
 import com.every.every.dto.ItemContentDTO;
 import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
-import com.every.every.service.entityService.ItemContentService;
+//import com.every.every.service.entityService.ItemContentService;
 import com.every.every.service.entityService.TreeStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,12 @@ import java.time.format.DateTimeFormatter;
 @RestController
 @RequestMapping("/itemContent")
 public class ItemContentController {
-    private final ItemContentService itemContentService;
+//    private final ItemContentService itemContentService;
     private final TreeStoreService treeStoreService;
 
     @Autowired
-    public ItemContentController(ItemContentService itemContentService, TreeStoreService treeStoreService) {
-        this.itemContentService = itemContentService;
+    public ItemContentController( TreeStoreService treeStoreService) {
+//        this.itemContentService = itemContentService;
         this.treeStoreService = treeStoreService;
     }
 
@@ -30,12 +30,13 @@ public class ItemContentController {
         treeStore.getData().setContentName(itemContentDTO.getContentName());
         treeStore.getData().setContentSize(itemContentDTO.getContentSize());
         treeStore.getData().setContentType(itemContentDTO.getContentType());
+        treeStore.getData().setDateTime(LocalDateTime.now());
 
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formatDateTime = now.format(formatter);
+//        LocalDateTime now = LocalDateTime.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        String formatDateTime = now.format(formatter);
+//        treeStore.getData().setFormatDateTime(formatDateTime);
 
-        treeStore.getData().setFormatDateTime(formatDateTime);
         treeStoreService.save(treeStore);
         return "update itemContent";
     }

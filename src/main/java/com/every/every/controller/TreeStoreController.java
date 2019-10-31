@@ -1,13 +1,16 @@
 package com.every.every.controller;
 
+import com.every.every.dto.Converter;
+import com.every.every.dto.TreeStoreDTO;
 import com.every.every.entity.TreeStore;
 import com.every.every.service.entityService.TreeStoreService;
-import com.every.every.service.util.GeneratorOfUniqueAcceptCode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/treeStore")
@@ -19,43 +22,67 @@ public class TreeStoreController {
         this.treeStoreService = treeStoreService;
     }
 
-//запилить роут для админа - http://localhost:8085/swagger-ui.html
-    @GetMapping("/getAllByLevel")
-    public Set<TreeStore> getListTreeStoreByType() {
-        System.out.println(GeneratorOfUniqueAcceptCode.generateAcceptCode());
-        return treeStoreService.getAllByLevel("root");
+    private Set<TreeStoreDTO> getRoots(Set<TreeStoreDTO> dtos) {
+        return dtos.stream().filter(dto -> "".equals(dto.getParent())).collect(Collectors.toSet());
     }
 
+    private void createTree(Set<TreeStoreDTO> leafs) {
+        for (TreeStoreDTO leaf : leafs) {
+            if (leafs.stream().anyMatch(leaf1 -> leaf.getParent().equals(leaf1.getId()))) {
+                Optional<TreeStoreDTO> parentOp = leafs.stream().filter(leaf1 -> leaf.getParent().equals(leaf1.getId())).findFirst();
+                if (parentOp.isPresent()) {
+                    TreeStoreDTO parrent = parentOp.get();
+                    parrent.getChildren().add(leaf);
+                }
 
-    @PostMapping("/saveChange")
-    public Set<TreeStore> saveTreeStore(@RequestBody List<TreeStore> treeStores) {
-        for (TreeStore treeStore : treeStores) {
-            treeStore.setType(treeStore.getData().getType());
-            treeStoreService.save(treeStore);
+            }
+
         }
-        return treeStoreService.getAllByLevel("root");
     }
 
+    //запилить роут для админа - http://localhost:8085/swagger-ui.html
+    @GetMapping("/getAllByLevel")
+    public Set<TreeStoreDTO> getListTreeStoreByLevel() {
+        Set<TreeStore> treeStore = treeStoreService.getAll();
+        System.out.println("treeStore: ===" + treeStore);
+        Set<TreeStoreDTO> treeStoreDTOS = new HashSet<>();
+
+
+        for (TreeStore str : treeStore) {
+            treeStoreDTOS.add(Converter.convertingTreeStoreToDTO(str));
+        }
+        System.out.println("treeStoreDTOS: ===" + treeStoreDTOS);
+        createTree(treeStoreDTOS);
+        Set<TreeStoreDTO> roots = getRoots(treeStoreDTOS);
+        System.out.println(roots);
+
+        return roots;
+    }
 
     @PostMapping("/saveNode/")
-    public TreeStore saveNode(@RequestBody TreeStore treeStore) {
-        System.out.println(treeStore);
+    public TreeStore saveNode(@RequestBody TreeStoreDTO treeStoreDTO) {
+        TreeStore treeStore = Converter.convertingDTOToTreeStore(treeStoreDTO);
         treeStoreService.save(treeStore);
         return treeStore;
     }
 
     @PostMapping("/saveNodeAsChild/")
-    public String saveNodeAsChild(@RequestBody TreeStore treeStore) {
-        TreeStore nodeParentNew = treeStoreService.getOne(treeStore.getParent());
-        nodeParentNew.getChildren().add(treeStore);
-        treeStoreService.save(nodeParentNew);
+    public String saveNodeAsChild(@RequestBody TreeStoreDTO treeStoreDTO) {
+        TreeStore treeStore = Converter.convertingDTOToTreeStore(treeStoreDTO);
+        if ("".equals(treeStoreDTO.getParent())) {
+            treeStore.setParent(null);
+        } else {
+            TreeStore parent = treeStoreService.getOne(treeStoreDTO.getParent());
+            treeStore.setParent(parent);
+        }
+        treeStoreService.save(treeStore);
         return "added child";
     }
 
     @PutMapping("/editNode/{id}")
     public String editNode(@PathVariable String id, @RequestBody String newName) {
         TreeStore nodeWithNewName = treeStoreService.getOne(id);
-        nodeWithNewName.setText(newName);
+        nodeWithNewName.setNameOfNode(newName);
         TreeStore nodeFromDB = treeStoreService.getOne(id);
         BeanUtils.copyProperties(nodeWithNewName, nodeFromDB, "id");
         treeStoreService.save(nodeWithNewName);

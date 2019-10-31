@@ -14,30 +14,38 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "\"ItemContent\"")
 public class ItemContent {
+
+    public ItemContent() {
+    }
+
+    public ItemContent(String content, String contentName, String contentType, long contentSize, LocalDateTime dateTime, TreeStore treeStore) {
+        this.content = content;
+        this.contentName = contentName;
+        this.contentType = contentType;
+        this.contentSize = contentSize;
+        this.dateTime = dateTime;
+        this.treeStore = treeStore;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "treeStore_id")
-    @JsonBackReference
-    private TreeStore treeStore;
 
-    private String text;
-
-    private String type;
-//    TODO json ignore
-    @Type(type="text")
+    @Type(type = "text")
     @JsonIgnore
     private String content;
-    @Type(type="text")
+    @Type(type = "text")
     private String contentName;
 
     private String contentType;
 
     private long contentSize;
 
-    private String formatDateTime;
+    private LocalDateTime dateTime;
 
-
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "treeStore_id")
+    @JsonBackReference
+    private TreeStore treeStore;
 }

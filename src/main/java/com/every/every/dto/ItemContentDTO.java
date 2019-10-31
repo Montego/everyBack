@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ItemContentDTO {
+public class ItemContentDTO implements DTO{
     private Long id;
 
     private String content;
