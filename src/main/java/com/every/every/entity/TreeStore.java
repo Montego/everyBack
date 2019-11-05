@@ -45,8 +45,8 @@ public class TreeStore {
     @JsonBackReference
     User user;
 
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
-    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "treeStore")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
+//    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "treeStore")
     @JsonManagedReference
     private ItemContent data;
 

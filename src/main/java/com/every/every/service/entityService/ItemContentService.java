@@ -18,4 +18,7 @@ public class ItemContentService {
     public ItemContent save(ItemContent itemContent) {
         return itemContentRepository.save(itemContent);
     }
+    public ItemContent getOne(Long id) {
+        return itemContentRepository.findById(id).get();
+    }
 }

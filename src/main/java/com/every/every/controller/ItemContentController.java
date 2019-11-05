@@ -3,17 +3,14 @@ package com.every.every.controller;
 import com.every.every.dto.ItemContentDTO;
 import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
-//import com.every.every.service.entityService.ItemContentService;
 import com.every.every.service.entityService.ItemContentService;
 import com.every.every.service.entityService.TreeStoreService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import static com.every.every.dto.Converter.convertItemContentDTOToItemContent;
+
+//import com.every.every.service.entityService.ItemContentService;
 
 @RestController
 @RequestMapping("/itemContent")
@@ -22,7 +19,7 @@ public class ItemContentController {
     private final TreeStoreService treeStoreService;
 
     @Autowired
-    public ItemContentController(ItemContentService itemContentService, TreeStoreService treeStoreService ) {
+    public ItemContentController(ItemContentService itemContentService, TreeStoreService treeStoreService) {
         this.itemContentService = itemContentService;
         this.treeStoreService = treeStoreService;
     }
@@ -33,15 +30,18 @@ public class ItemContentController {
         ItemContent itemContentFromDB = treeStore.getData();
         ItemContent itemContentNew = convertItemContentDTOToItemContent(itemContentDTO);
 
+//        itemContentNew.setId(itemContentFromDB.getId());
+//        itemContentNew.setType(itemContentFromDB.getType());
+//        BeanUtils.copyProperties(itemContentNew, itemContentFromDB, "id");
+
         itemContentNew.setId(itemContentFromDB.getId());
         itemContentNew.setType(itemContentFromDB.getType());
-//        BeanUtils.copyProperties(itemContentNew, itemContentFromDB, "id","treestore_id");
-
         itemContentNew.setTreeStore(treeStore);
+
         treeStore.setData(itemContentNew);
 
-        itemContentService.save(itemContentNew);
-//        treeStoreService.save(treeStore);
+//        itemContentService.save(itemContentNew);
+        treeStoreService.save(treeStore);
         return "update itemContent";
     }
 
