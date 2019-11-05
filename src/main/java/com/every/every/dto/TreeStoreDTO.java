@@ -32,7 +32,7 @@ public class TreeStoreDTO implements DTO {
 
     private User user;
 
-    private ItemContentDTO itemContentDTO;
+    private ItemContentDTO data;
 
     private Set<TreeStoreDTO> children = new HashSet<>();
 
@@ -45,7 +45,7 @@ public class TreeStoreDTO implements DTO {
                 ", text='" + text + '\'' +
                 ", type='" + type + '\'' +
                 ", user=" + user +
-                ", itemContentDTO=" + itemContentDTO +
+                ", itemContentDTO=" + data +
                 '}';
     }
 }

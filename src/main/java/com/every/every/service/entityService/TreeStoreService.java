@@ -27,9 +27,9 @@ public class TreeStoreService {
         }
     }
 
-    public Set<TreeStore> getAllByLevel(Boolean isRoot) {
-        return treeStoreRepository.findAllByIsRoot(isRoot);
-    }
+//    public Set<TreeStore> getAllByLevel(Boolean isRoot) {
+//        return treeStoreRepository.findAllByIsRoot(isRoot);
+//    }
     public Set<TreeStore> getAll() {
         List<TreeStore> treeStores = treeStoreRepository.findAll();
         Set<TreeStore> ts = new HashSet<>(treeStores);
@@ -57,7 +57,7 @@ public class TreeStoreService {
         TreeStore deleteTreeStore = treeStoreRepository.getOne(id);
         Set<TreeStore> children = treeStoreRepository.findAllByParent(deleteTreeStore);
         System.out.println(children.toString());
-        if(deleteTreeStore.getIsRoot()){
+        if(deleteTreeStore.getParent() == null){
             if(children.size()!=0){
                 System.out.println("есть дети, нет родителя");
                 for (TreeStore child : children) {

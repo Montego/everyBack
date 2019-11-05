@@ -2,6 +2,7 @@ package com.every.every.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -31,6 +32,7 @@ public class ItemContent {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String type;
 
     @Type(type = "text")
     @JsonIgnore

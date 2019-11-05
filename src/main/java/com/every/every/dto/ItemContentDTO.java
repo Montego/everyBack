@@ -17,4 +17,18 @@ public class ItemContentDTO implements DTO{
     private String contentType;
 
     private long contentSize;
+
+    private String type;
+
+    private String text;
+
+    public ItemContentDTO(Long id, String content, String contentName, String contentType, long contentSize, String type, String text) {
+        this.id = id;
+        this.content = content;
+        this.contentName = contentName;
+        this.contentType = contentType;
+        this.contentSize = contentSize;
+        this.type = type;
+        this.text = text;
+    }
 }

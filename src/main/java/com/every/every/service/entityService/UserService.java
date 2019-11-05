@@ -2,7 +2,7 @@ package com.every.every.service.entityService;
 
 import com.every.every.entity.User;
 import com.every.every.repository.UserRepository;
-import com.every.every.service.util.GeneratorOfUniqueAcceptCode;
+//import com.every.every.service.util.GeneratorOfUniqueAcceptCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;

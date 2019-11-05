@@ -4,40 +4,44 @@ import com.every.every.dto.ItemContentDTO;
 import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
 //import com.every.every.service.entityService.ItemContentService;
+import com.every.every.service.entityService.ItemContentService;
 import com.every.every.service.entityService.TreeStoreService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.every.every.dto.Converter.convertItemContentDTOToItemContent;
+
 @RestController
 @RequestMapping("/itemContent")
 public class ItemContentController {
-//    private final ItemContentService itemContentService;
+    private final ItemContentService itemContentService;
     private final TreeStoreService treeStoreService;
 
     @Autowired
-    public ItemContentController( TreeStoreService treeStoreService) {
-//        this.itemContentService = itemContentService;
+    public ItemContentController(ItemContentService itemContentService, TreeStoreService treeStoreService ) {
+        this.itemContentService = itemContentService;
         this.treeStoreService = treeStoreService;
     }
 
     @PutMapping("/editItemContent/{id}")
     public String editItemContent(@PathVariable String id, @RequestBody ItemContentDTO itemContentDTO) {
         TreeStore treeStore = treeStoreService.getOne(id);
-        treeStore.getData().setContent(itemContentDTO.getContent());
-        treeStore.getData().setContentName(itemContentDTO.getContentName());
-        treeStore.getData().setContentSize(itemContentDTO.getContentSize());
-        treeStore.getData().setContentType(itemContentDTO.getContentType());
-        treeStore.getData().setDateTime(LocalDateTime.now());
+        ItemContent itemContentFromDB = treeStore.getData();
+        ItemContent itemContentNew = convertItemContentDTOToItemContent(itemContentDTO);
 
-//        LocalDateTime now = LocalDateTime.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        String formatDateTime = now.format(formatter);
-//        treeStore.getData().setFormatDateTime(formatDateTime);
+        itemContentNew.setId(itemContentFromDB.getId());
+        itemContentNew.setType(itemContentFromDB.getType());
+//        BeanUtils.copyProperties(itemContentNew, itemContentFromDB, "id","treestore_id");
 
-        treeStoreService.save(treeStore);
+        itemContentNew.setTreeStore(treeStore);
+        treeStore.setData(itemContentNew);
+
+        itemContentService.save(itemContentNew);
+//        treeStoreService.save(treeStore);
         return "update itemContent";
     }
 

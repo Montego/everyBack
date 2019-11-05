@@ -16,26 +16,27 @@ public class TreeStore {
     public TreeStore() {
     }
 
-    public TreeStore(String id, Boolean isRoot, String nameOfNode, Boolean isFile, User user, ItemContent data, TreeStore parent) {
+    public TreeStore(String id, String nameOfNode, Boolean isFile, User user, ItemContent data, TreeStore parent) {
         this.id = id;
-        this.isRoot = isRoot;
+//        this.isRoot = isRoot;
         this.nameOfNode = nameOfNode;
         this.isFile = isFile;
         this.user = user;
         this.data = data;
         this.parent = parent;
     }
-    public TreeStore(String id, Boolean isRoot, String nameOfNode, Boolean isFile) {
+    public TreeStore(String id,String nameOfNode, Boolean isFile, ItemContent itemContent) {
         this.id = id;
-        this.isRoot = isRoot;
+//        this.isRoot = isRoot;
         this.nameOfNode = nameOfNode;
         this.isFile = isFile;
+        this.data = itemContent;
 
     }
     @Id
     private String id;
 
-    private Boolean isRoot;
+//    private Boolean isRoot;
     private String nameOfNode;
     private Boolean isFile;
 
@@ -44,7 +45,8 @@ public class TreeStore {
     @JsonBackReference
     User user;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "treeStore")
+    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "treeStore")
     @JsonManagedReference
     private ItemContent data;
 
@@ -70,7 +72,6 @@ public class TreeStore {
     public String toString() {
         return "TreeStore{" +
                 "id='" + id + '\'' +
-                ", isRoot=" + isRoot +
                 ", nameOfNode='" + nameOfNode + '\'' +
                 ", isFile=" + isFile +
                 ", user=" + user +

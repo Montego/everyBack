@@ -2,6 +2,7 @@ package com.every.every.controller;
 
 import com.every.every.dto.Converter;
 import com.every.every.dto.TreeStoreDTO;
+import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
 import com.every.every.service.entityService.TreeStoreService;
 import org.springframework.beans.BeanUtils;
@@ -47,7 +48,6 @@ public class TreeStoreController {
         System.out.println("treeStore: ===" + treeStore);
         Set<TreeStoreDTO> treeStoreDTOS = new HashSet<>();
 
-
         for (TreeStore str : treeStore) {
             treeStoreDTOS.add(Converter.convertingTreeStoreToDTO(str));
         }
@@ -61,7 +61,17 @@ public class TreeStoreController {
 
     @PostMapping("/saveNode/")
     public TreeStore saveNode(@RequestBody TreeStoreDTO treeStoreDTO) {
+        System.out.println("=======" + treeStoreDTO);
         TreeStore treeStore = Converter.convertingDTOToTreeStore(treeStoreDTO);
+        if (treeStore.getData() == null) {
+            ItemContent itemContent = new ItemContent();
+            itemContent.setTreeStore(treeStore);
+            treeStore.setData(itemContent);
+        } else {
+            ItemContent itemContent = treeStore.getData();
+            itemContent.setTreeStore(treeStore);
+            treeStore.setData(itemContent);
+        }
         treeStoreService.save(treeStore);
         return treeStore;
     }
@@ -69,11 +79,17 @@ public class TreeStoreController {
     @PostMapping("/saveNodeAsChild/")
     public String saveNodeAsChild(@RequestBody TreeStoreDTO treeStoreDTO) {
         TreeStore treeStore = Converter.convertingDTOToTreeStore(treeStoreDTO);
+        if(treeStoreDTO.getType().equals("folder")){
+
+        }
         if ("".equals(treeStoreDTO.getParent())) {
             treeStore.setParent(null);
         } else {
             TreeStore parent = treeStoreService.getOne(treeStoreDTO.getParent());
             treeStore.setParent(parent);
+            ItemContent itemContent = treeStore.getData();
+            itemContent.setTreeStore(treeStore);
+            treeStore.setData(itemContent);
         }
         treeStoreService.save(treeStore);
         return "added child";
