@@ -27,6 +27,7 @@ public class TreeStoreController {
         return dtos.stream().filter(dto -> "".equals(dto.getParent())).collect(Collectors.toSet());
     }
 
+
     private void createTree(Set<TreeStoreDTO> leafs) {
         for (TreeStoreDTO leaf : leafs) {
             if (leafs.stream().anyMatch(leaf1 -> leaf.getParent().equals(leaf1.getId()))) {
@@ -59,6 +60,26 @@ public class TreeStoreController {
         return roots;
     }
 
+    @GetMapping("/getAllWithoutFiles")
+    public Set<TreeStoreDTO> getListTreeStoreWithoutFiles() {
+        Set<TreeStore> treeStore = treeStoreService.getAllWithoutFiles();
+        Set<TreeStoreDTO> treeStoreDTOS = new HashSet<>();
+
+        for (TreeStore str : treeStore) {
+            treeStoreDTOS.add(Converter.convertingTreeStoreToDTO(str));
+        }
+        createTree(treeStoreDTOS);
+
+        return getRoots(treeStoreDTOS);
+    }
+
+    //    TODO FilesByParentID
+    @GetMapping("/getAllFilesByParent/{id}")
+    public Set<TreeStore> getListTreeStoreFilesByParent(@PathVariable String id) {
+//        return treeStoreService.getAllByIsFileAndOrderByParent(id);
+        return null;
+    }
+
     @PostMapping("/saveNode/")
     public TreeStore saveNode(@RequestBody TreeStoreDTO treeStoreDTO) {
         System.out.println("=======" + treeStoreDTO);
@@ -79,9 +100,9 @@ public class TreeStoreController {
     @PostMapping("/saveNodeAsChild/")
     public String saveNodeAsChild(@RequestBody TreeStoreDTO treeStoreDTO) {
         TreeStore treeStore = Converter.convertingDTOToTreeStore(treeStoreDTO);
-        if(treeStoreDTO.getType().equals("folder")){
-
-        }
+//        if (treeStoreDTO.getType().equals("folder")) {
+//
+//        }
         if ("".equals(treeStoreDTO.getParent())) {
             treeStore.setParent(null);
         } else {

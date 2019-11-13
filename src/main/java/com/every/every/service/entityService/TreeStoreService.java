@@ -19,15 +19,15 @@ public class TreeStoreService {
     }
 
     public TreeStore getOne(String id) {
-        if(treeStoreRepository.findById(id).isPresent()){
+        if (treeStoreRepository.findById(id).isPresent()) {
             return treeStoreRepository.findById(id).get();
-        }else{
+        } else {
 //TODO обработать ошибку
             return null;
         }
     }
 
-//    public Set<TreeStore> getAllByLevel(Boolean isRoot) {
+    //    public Set<TreeStore> getAllByLevel(Boolean isRoot) {
 //        return treeStoreRepository.findAllByIsRoot(isRoot);
 //    }
     public Set<TreeStore> getAll() {
@@ -39,13 +39,22 @@ public class TreeStoreService {
         return ts;
     }
 
+    public Set<TreeStore> getAllWithoutFiles(){
+        return treeStoreRepository.findAllByIsFile(false);
+    }
+
+
     public TreeStore save(TreeStore treeStores) {
         return treeStoreRepository.save(treeStores);
     }
 
-    private void recursiveDelete(TreeStore treeStore){
+//    public Set<TreeStore> getAllByIsFileAndOrderByParent(String parent){
+//        return treeStoreRepository.findAllByIsFileAndOrderByParent(parent);
+//    }
+
+    private void recursiveDelete(TreeStore treeStore) {
         Set<TreeStore> children = treeStoreRepository.findAllByParent(treeStore);
-        if(children.size()!=0){
+        if (children.size() != 0) {
             for (TreeStore child : children) {
                 recursiveDelete(child);
                 treeStoreRepository.delete(child);
@@ -57,26 +66,27 @@ public class TreeStoreService {
         TreeStore deleteTreeStore = treeStoreRepository.getOne(id);
         Set<TreeStore> children = treeStoreRepository.findAllByParent(deleteTreeStore);
         System.out.println(children.toString());
-        if(deleteTreeStore.getParent() == null){
-            if(children.size()!=0){
+        if (deleteTreeStore.getParent() == null) {
+            if (children.size() != 0) {
                 System.out.println("есть дети, нет родителя");
                 for (TreeStore child : children) {
-                treeStoreRepository.delete(child);
-            }
-            }else{
+                    treeStoreRepository.delete(child);
+                }
+                treeStoreRepository.deleteById(id);
+            } else {
                 System.out.println("нет детей, нет родителя");
                 treeStoreRepository.deleteById(id);
             }
 
-        }else {
-            if(children.size()!=0){
+        } else {
+            if (children.size() != 0) {
                 System.out.println("есть дети, нет родителя");
                 for (TreeStore child : children) {
 //                    treeStoreRepository.delete(child);
                     recursiveDelete(deleteTreeStore);
                 }
                 treeStoreRepository.delete(deleteTreeStore);
-            }else{
+            } else {
                 treeStoreRepository.delete(deleteTreeStore);
                 System.out.println("нет детей, есть родитель");
             }

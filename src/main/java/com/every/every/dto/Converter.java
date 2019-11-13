@@ -4,6 +4,7 @@ import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Converter {
 
@@ -38,6 +39,10 @@ public class Converter {
             result.setContentType(data.getContentType());
             result.setContentSize(data.getContentSize());
             result.setType(data.getType());
+
+            DateTimeFormatter formater = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formatDateTime = data.getDateTime().format(formater);
+            result.setFormatDateTime(formatDateTime);
         }
         return result;
     }
