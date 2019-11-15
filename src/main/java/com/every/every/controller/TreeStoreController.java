@@ -75,8 +75,14 @@ public class TreeStoreController {
 
     //    TODO FilesByParentID
     @GetMapping("/getAllFilesByParent/{id}")
-    public Set<TreeStore> getListTreeStoreFilesByParent(@PathVariable String id) {
-        return treeStoreService.getAllByIsFileAndParent(true,id);
+    public Set<TreeStoreDTO> getListTreeStoreFilesByParent(@PathVariable String id) {
+        Set<TreeStore> treeStore = treeStoreService.getAllByIsFileAndParent(true,id);
+        Set<TreeStoreDTO> treeStoreDTOS = new HashSet<>();
+        for (TreeStore str : treeStore) {
+            treeStoreDTOS.add(Converter.convertingTreeStoreToDTO(str));
+        }
+        return treeStoreDTOS;
+//        return treeStoreService.getAllByIsFileAndParent(true,id);
     }
 
     @PostMapping("/saveNode/")
