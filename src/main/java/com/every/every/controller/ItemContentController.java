@@ -3,17 +3,19 @@ package com.every.every.controller;
 import com.every.every.dto.ItemContentDTO;
 import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
-//import com.every.every.service.entityService.ItemContentService;
 import com.every.every.service.entityService.ItemContentService;
 import com.every.every.service.entityService.TreeStoreService;
-import org.springframework.beans.BeanUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import static com.every.every.dto.Converter.convertItemContentDTOToItemContent;
+
+//import com.every.every.service.entityService.ItemContentService;
 
 @RestController
 @RequestMapping("/itemContent")
@@ -22,7 +24,7 @@ public class ItemContentController {
     private final TreeStoreService treeStoreService;
 
     @Autowired
-    public ItemContentController(ItemContentService itemContentService, TreeStoreService treeStoreService ) {
+    public ItemContentController(ItemContentService itemContentService, TreeStoreService treeStoreService) {
         this.itemContentService = itemContentService;
         this.treeStoreService = treeStoreService;
     }
@@ -47,4 +49,21 @@ public class ItemContentController {
     public ItemContent getItemContent(@PathVariable String id) {
         return treeStoreService.getOne(id).getData();
     }
+
+    @GetMapping("/getOneItem/{id}")
+    public void getFile(@PathVariable String id, HttpServletResponse response) throws IOException {
+        ItemContent currFile = treeStoreService.getOne(id).getData();
+        String content = currFile.getContent();
+        String fileName = currFile.getContentName();
+//TODO доделать - возвращение pdf
+        byte[] data = Base64.decodeBase64(content);
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "inline; filename =" + fileName);
+
+        OutputStream out = response.getOutputStream();
+        out.flush();
+        out.close();
+    }
+
+
 }

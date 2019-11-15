@@ -39,6 +39,8 @@ public class ItemContent {
     private String content;
     @Type(type = "text")
     private String contentName;
+    @Type(type = "text")
+    private String description;
 
     private String contentType;
 

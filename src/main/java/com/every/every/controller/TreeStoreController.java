@@ -76,8 +76,7 @@ public class TreeStoreController {
     //    TODO FilesByParentID
     @GetMapping("/getAllFilesByParent/{id}")
     public Set<TreeStore> getListTreeStoreFilesByParent(@PathVariable String id) {
-//        return treeStoreService.getAllByIsFileAndOrderByParent(id);
-        return null;
+        return treeStoreService.getAllByIsFileAndParent(true,id);
     }
 
     @PostMapping("/saveNode/")

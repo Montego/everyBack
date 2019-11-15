@@ -39,6 +39,7 @@ public class Converter {
             result.setContentType(data.getContentType());
             result.setContentSize(data.getContentSize());
             result.setType(data.getType());
+            result.setDescription(data.getDescription());
 
             DateTimeFormatter formater = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formatDateTime = data.getDateTime().format(formater);
@@ -58,6 +59,7 @@ public class Converter {
             result.setContentType(dto.getContentType());
             result.setContentName(dto.getContentName());
             result.setContentSize(dto.getContentSize());
+            result.setDescription(dto.getDescription());
             result.setType(dto.getType());
 
         }

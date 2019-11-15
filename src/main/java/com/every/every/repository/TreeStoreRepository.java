@@ -15,5 +15,6 @@ public interface TreeStoreRepository extends JpaRepository<TreeStore, String> {
 //    Collection<TreeStore> findAll();
     Set<TreeStore> findAllByIsFile(boolean isFile);
 
+    Set<TreeStore> findAllByIsFileAndParent(boolean isFile, TreeStore parentId);
 
 }

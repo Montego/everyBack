@@ -44,13 +44,15 @@ public class TreeStoreService {
     }
 
 
+
     public TreeStore save(TreeStore treeStores) {
         return treeStoreRepository.save(treeStores);
     }
 
-//    public Set<TreeStore> getAllByIsFileAndOrderByParent(String parent){
-//        return treeStoreRepository.findAllByIsFileAndOrderByParent(parent);
-//    }
+    public Set<TreeStore> getAllByIsFileAndParent(boolean isFile, String parentId){
+        TreeStore parent = getOne(parentId);
+        return treeStoreRepository.findAllByIsFileAndParent(true, parent);
+    }
 
     private void recursiveDelete(TreeStore treeStore) {
         Set<TreeStore> children = treeStoreRepository.findAllByParent(treeStore);
