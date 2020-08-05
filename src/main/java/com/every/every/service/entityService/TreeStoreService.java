@@ -1,13 +1,19 @@
 package com.every.every.service.entityService;
 
+import com.every.every.dto.Converter;
+import com.every.every.dto.TreeStoreDTO;
+import com.every.every.entity.ItemContent;
 import com.every.every.entity.TreeStore;
 import com.every.every.repository.TreeStoreRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TreeStoreService {
@@ -22,36 +28,100 @@ public class TreeStoreService {
         if (treeStoreRepository.findById(id).isPresent()) {
             return treeStoreRepository.findById(id).get();
         } else {
-//TODO обработать ошибку
             return null;
         }
     }
 
-    //    public Set<TreeStore> getAllByLevel(Boolean isRoot) {
-//        return treeStoreRepository.findAllByIsRoot(isRoot);
-//    }
-    public Set<TreeStore> getAll() {
+    private Set<TreeStoreDTO> getRoots(Set<TreeStoreDTO> dtos) {
+        return dtos.stream().filter(dto -> "".equals(dto.getParent())).collect(Collectors.toSet());
+    }
+
+    private void createTree(Set<TreeStoreDTO> leafs) {
+        for (TreeStoreDTO leaf : leafs) {
+            if (leafs.stream().anyMatch(leaf1 -> leaf.getParent().equals(leaf1.getId()))) {
+                Optional<TreeStoreDTO> parentOp = leafs.stream().filter(leaf1 -> leaf.getParent().equals(leaf1.getId())).findFirst();
+                if (parentOp.isPresent()) {
+                    TreeStoreDTO parent = parentOp.get();
+                    parent.getChildren().add(leaf);
+                }
+
+            }
+
+        }
+    }
+
+
+    private Set<TreeStoreDTO> convertToDTO(Set<TreeStore> treeStore) {
+        Set<TreeStoreDTO> treeStoreDTOS = new HashSet<>();
+        for (TreeStore str : treeStore) {
+            treeStoreDTOS.add(Converter.convertingTreeStoreToDTO(str));
+        }
+        return treeStoreDTOS;
+    }
+
+    private Set<TreeStoreDTO> getTreeStoreDTOS(List<TreeStore> treeStores) {
+        Set<TreeStore> treeStore = new HashSet<>(treeStores);
+        return convertToDTO(treeStore);
+    }
+
+
+    public Set<TreeStoreDTO> getAll() {
         List<TreeStore> treeStores = treeStoreRepository.findAll();
-        Set<TreeStore> ts = new HashSet<>(treeStores);
-//        for (int i = 0; i <treeStores.size() ; i++) {
-//
-//        }
-        return ts;
+        Set<TreeStoreDTO> treeStoreDTOS = getTreeStoreDTOS(treeStores);
+        return getRoots(treeStoreDTOS);
     }
 
-    public Set<TreeStore> getAllWithoutFiles(){
-        return treeStoreRepository.findAllByIsFile(false);
+    public Set<TreeStoreDTO> getAllWithoutFiles() {
+        Set<TreeStore> treeStores = treeStoreRepository.findAllByIsFile(false);
+        Set<TreeStoreDTO> DTOS = convertToDTO(treeStores);
+        createTree(DTOS);
+        return getRoots(DTOS);
     }
 
 
+    public TreeStore saveNode(TreeStoreDTO treeStoreDTO) {
+        TreeStore treeStore = Converter.convertingDTOToTreeStore(treeStoreDTO);
+        if (treeStore.getData() == null) {
+            ItemContent itemContent = new ItemContent();
+            itemContent.setTreeStore(treeStore);
+            treeStore.setData(itemContent);
+        } else {
+            ItemContent itemContent = treeStore.getData();
+            itemContent.setTreeStore(treeStore);
+            treeStore.setData(itemContent);
+        }
 
-    public TreeStore save(TreeStore treeStores) {
-        return treeStoreRepository.save(treeStores);
+        return treeStoreRepository.save(treeStore);
     }
 
-    public Set<TreeStore> getAllByIsFileAndParent(boolean isFile, String parentId){
+    public String saveNodeAsChild(TreeStoreDTO treeStoreDTO) {
+        TreeStore treeStore = Converter.convertingDTOToTreeStore(treeStoreDTO);
+        if ("".equals(treeStoreDTO.getParent())) {
+            treeStore.setParent(null);
+        } else {
+            TreeStore parent = getOne(treeStoreDTO.getParent());
+            treeStore.setParent(parent);
+            ItemContent itemContent = treeStore.getData();
+            itemContent.setTreeStore(treeStore);
+            treeStore.setData(itemContent);
+        }
+        treeStoreRepository.save(treeStore);
+        return "added child";
+    }
+
+    public String saveEditNode(String id, String newName) {
+        TreeStore nodeWithNewName = getOne(id);
+        nodeWithNewName.setNameOfNode(newName);
+        TreeStore nodeFromDB = getOne(id);
+        BeanUtils.copyProperties(nodeWithNewName, nodeFromDB, "id");
+        treeStoreRepository.save(nodeWithNewName);
+        return "update node";
+    }
+
+    public Set<TreeStoreDTO> getAllByIsFileAndParent(boolean isFile, String parentId) {
         TreeStore parent = getOne(parentId);
-        return treeStoreRepository.findAllByIsFileAndParent(true, parent);
+        Set<TreeStore> treeStore = treeStoreRepository.findAllByIsFileAndParent(true, parent);
+        return convertToDTO(treeStore);
     }
 
     private void recursiveDelete(TreeStore treeStore) {
@@ -84,7 +154,6 @@ public class TreeStoreService {
             if (children.size() != 0) {
                 System.out.println("есть дети, нет родителя");
                 for (TreeStore child : children) {
-//                    treeStoreRepository.delete(child);
                     recursiveDelete(deleteTreeStore);
                 }
                 treeStoreRepository.delete(deleteTreeStore);

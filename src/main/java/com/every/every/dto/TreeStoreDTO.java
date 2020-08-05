@@ -1,6 +1,5 @@
 package com.every.every.dto;
 
-import com.every.every.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,8 +29,6 @@ public class TreeStoreDTO implements DTO {
 
     private String type;
 
-    private User user;
-
     private ItemContentDTO data;
 
     private Set<TreeStoreDTO> children = new HashSet<>();
@@ -44,7 +41,6 @@ public class TreeStoreDTO implements DTO {
                 ", parent='" + parent + '\'' +
                 ", text='" + text + '\'' +
                 ", type='" + type + '\'' +
-                ", user=" + user +
                 ", itemContentDTO=" + data +
                 '}';
     }

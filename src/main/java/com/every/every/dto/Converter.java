@@ -10,7 +10,6 @@ public class Converter {
 
     public static TreeStore convertingDTOToTreeStore(TreeStoreDTO treeStoreDTO) {
         String id = treeStoreDTO.getId();
-        Boolean isRoot = "root".equals(treeStoreDTO.getLevel());
         String nameOfNode = treeStoreDTO.getText();
         Boolean isFile = "file".equals(treeStoreDTO.getType());
         ItemContent data = convertItemContentDTOToItemContent( treeStoreDTO.getData());

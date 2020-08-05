@@ -26,13 +26,5 @@ public class ItemContentDTO implements DTO{
 
     private String formatDateTime;
 
-    public ItemContentDTO(String content, String contentName, String contentType, long contentSize, String type, String text, String description) {
-        this.content = content;
-        this.contentName = contentName;
-        this.contentType = contentType;
-        this.contentSize = contentSize;
-        this.type = type;
-        this.text = text;
-        this.description = description;
-    }
+
 }
